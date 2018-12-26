@@ -9,4 +9,4 @@ Original Art - Blizzard Entertainment
 Portation for Source Filmmaker/HLMV - Yaron (https://sfmlab.com/profile/3762/)
 Portation for BGEE/SOD/2EE - Ulb 
 Portation for Classic BG2/BGT - Gwendolyne
-Argent77 for the automated animation slot code I stole from him. :)
+Argent77 for the automated animation slot code I stole from him.
