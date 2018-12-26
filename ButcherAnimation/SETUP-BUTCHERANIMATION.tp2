@@ -1,0 +1,50 @@
+BACKUP ~ButcherAnimation/Backup~ // So WeiDU can uninstall
+AUTHOR ~Ulb~
+README ~ButcherAnimation/readme.txt~ // Shows readme file
+
+ALWAYS
+	INCLUDE ~%MOD_FOLDER%/lib/functions.tph~
+	
+	OUTER_SET GAME_IS_BG2_IA = (GAME_IS ~bg2 tob bgt~ AND (MOD_IS_INSTALLED ~setup-infinityanimations.tp2~ 0)) ? 1 : 0
+	
+END
+  
+BEGIN ~The Butcher (HOTS) animation port~ 
+
+ACTION_IF (GAME_IS_BGEE OR GAME_IS_SOD OR GAME_IS_EET) BEGIN
+	LAF FIND_FREE_ANIM_SLOT INT_VAR slotMin = 0xe000 slotMax = 0xefff RET slot END
+	ACTION_IF (slot <= 0) BEGIN
+		FAIL ~No free creature animation slot found.~// No free creature animation slot found.
+	END
+
+	LAF TO_HEX_NUMBER INT_VAR value = slot minDigits = 4 RET hexNumber END
+	APPEND ~animate.ids~ ~0x%hexNumber% THE_BUTCHER_HOTS~ UNLESS ~THE_BUTCHER_HOTS~
+	CLEAR_IDS_MAP
+
+	COPY ~%MOD_FOLDER%/files/exxx.ini~ ~override/%hexNumber%.ini~
+
+	ACTION_BASH_FOR ~%MOD_FOLDER%/files/anim~ ~^.+\.bam$~ BEGIN
+		COPY ~%BASH_FOR_FILESPEC%~ ~override~
+	END
+
+	COPY ~%MOD_FOLDER%/files/sound~ ~override~
+END 
+ELSE ACTION_IF (GAME_IS_BG2_IA) BEGIN
+
+	APPEND ~animate.ids~	~0x5339 THE_BUTCHER_HOTS~ UNLESS ~^0x5339~
+	APPEND ~anisnd.ids~		~0x5339 µJS      CGAMEANIMATIONTYPE_THE_BUTCHER_HOTS~ UNLESS ~^0x5339~
+
+	ACTION_BASH_FOR ~%MOD_FOLDER%/files/anim~ ~^.+\.bam$~ BEGIN
+		OUTER_INNER_PATCH_SAVE bam_BG2 "%BASH_FOR_RES%" BEGIN REPLACE_TEXTUALLY ~^UB#TB~ ~µJS~	END
+		ACTION_IF NOT FILE_EXISTS_IN_GAME ~%bam_BG2%.bam%~ BEGIN
+			COPY ~%BASH_FOR_FILESPEC%~ ~override/%bam_BG2%.bam~
+		END
+	END
+
+	COPY ~%MOD_FOLDER%/files/sound~ ~override~
+	COPY ~%MOD_FOLDER%/files/µJS.2da~ ~override~
+
+END 
+ELSE BEGIN
+	PRINT ~REQUIRES an Enhanced game or the Infinity Animation core mod (with BG2, ToB or BGT) to be installed.~
+END
