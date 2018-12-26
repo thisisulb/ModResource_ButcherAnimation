@@ -5,9 +5,7 @@ The Butcher animation ported to Baldur's Gate (EE/SOD/2EE)
 This contains the Butcher animation
 from Heroes of the Storm, some of his sound files and a general
 installer to put them into the game. There is no playable content in
-this mod, it is just a modding resource. (A mod using the animation
-is in the works though..)
-
+this mod, it is just a modding resource.
 
 Some notes on the animation:
 
